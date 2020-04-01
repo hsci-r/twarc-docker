@@ -1,6 +1,6 @@
 FROM python:3.7-alpine
 
-RUN apk add --no-cache tini coreutils lrzip gawk jq
+RUN apk add --no-cache tini coreutils lrzip gawk jq rsync
 # RUN apk add --no-cache dumb-init coreutils
 
 RUN pip install twarc==1.7.5
