@@ -1,4 +1,4 @@
-FROM hsci/twarc-docker
+FROM hsci/twarc-docker:base
 
 ENV BUCKET tweets
 
