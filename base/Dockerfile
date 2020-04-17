@@ -12,7 +12,7 @@ ENV EXTRA_OPTS ""
 ENV SPLIT 50000
 
 VOLUME /data
-VOLUME /s3cfg
+VOLUME /credentials
 
 WORKDIR /data
 
