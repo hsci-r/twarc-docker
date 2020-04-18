@@ -36,8 +36,12 @@ def mergeSortedFiles(paths, keyfunc=standard_keyfunc):
 
 def main():
     (lines,dupLines) = mergeSortedFiles(sys.argv[1:])
+    log = open("/data/merge.log","a")
     for k in lines:
-        print(k+": "+str(lines[k]-dupLines[k])+"/"+str(lines[k]),file=sys.stderr)
+        uniqLines = lines[k]-dupLines[k]
+        out = "{}: {:,}/{:,} ({:.2%})".format(k,uniqLines,lines[k],uniqLines/lines[k])
+        print(out,file=log)
+        print(out,file=sys.stderr)
 
 if __name__ == "__main__":
     main()
