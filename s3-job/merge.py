@@ -46,7 +46,10 @@ def main():
     with open(sys.argv[-1],"a") as logf:
         for k in lines:
             uniqLines = lines[k]-dupLines[k]
-            out = "{}: {:,}/{:,} ({:.2%})".format(k,uniqLines,lines[k],uniqLines/lines[k])
+            if lines[k]==0:
+                out = "{}: 0/0 (0%)".format(k)
+            else:
+                out = "{}: {:,}/{:,} ({:.2%})".format(k,uniqLines,lines[k],uniqLines/lines[k])
             print(out,file=logf)
             print(out,file=sys.stderr)
 
