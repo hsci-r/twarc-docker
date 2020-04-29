@@ -22,6 +22,7 @@ def mergeSortedFiles(paths, idspath, keyfunc=standard_keyfunc):
     dupLines = {f.name:0 for f in files}
     previous_file = None
     previous_comparable = None
+    tlines = 0
     with gzip.open(idspath,"wt") as idsf:
         idsre = re.compile('"id_str": "(.*?)"')
         for line in heapq.merge(*[decorated_file(f, keyfunc) for f in files]):
@@ -29,6 +30,7 @@ def mergeSortedFiles(paths, idspath, keyfunc=standard_keyfunc):
             comparable = line[0]
             if previous_comparable != comparable:
                 print(line[1], end = '')
+                tlines += 1
                 m = idsre.search(line[1])
                 if m is not None:
                     print(m[1],file=idsf)
@@ -39,10 +41,10 @@ def mergeSortedFiles(paths, idspath, keyfunc=standard_keyfunc):
                     dupLines[previous_file] += 1
                     previous_file = None
                 dupLines[line[2]] += 1
-    return (lines,dupLines)
+    return (lines,dupLines,tlines)
 
 def main():
-    (lines,dupLines) = mergeSortedFiles(sys.argv[1:-2],sys.argv[-2])
+    (lines,dupLines,tlines) = mergeSortedFiles(sys.argv[1:-2],sys.argv[-2])
     with open(sys.argv[-1],"a") as logf:
         for k in lines:
             uniqLines = lines[k]-dupLines[k]
@@ -52,6 +54,9 @@ def main():
                 out = "{}: {:,}/{:,} ({:.2%})".format(k,uniqLines,lines[k],uniqLines/lines[k])
             print(out,file=logf)
             print(out,file=sys.stderr)
+        out = "Wrote {:,} tweets.".format(tlines)
+        print(out,file=logf)
+        print(out,file=sys.stderr)
 
 if __name__ == "__main__":
     main()
