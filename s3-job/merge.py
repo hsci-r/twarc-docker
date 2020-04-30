@@ -37,7 +37,7 @@ def mergeSortedFiles(paths, idspath, keyfunc=standard_keyfunc):
                 m = idsre.search(line[1])
                 if m is not None:
                     print(m[1],file=idsf)
-                    if len(samples[line[2]]) < 5:
+                    if len(samples[line[2]]) < 3:
                         ftm = ftre.search(line[1])
                         if ftm is not None:
                             samples[line[2]].append(ftm[1])

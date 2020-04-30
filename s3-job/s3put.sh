@@ -12,4 +12,4 @@ echo "<li><a href=\"${OUTPUT_FILE}.jsonl.lrz\">${OUTPUT_FILE}.jsonl.lrz</a> (${L
 s3cmd -c /credentials/s3cfg put /data/index_full.html s3://${FULL_BUCKET}/index.html
 SIZE=`s3cmd -c /credentials/s3cfg --progress put /data/tweetids.txt.gz s3://${ID_BUCKET}/${OUTPUT_FILE}.txt.gz | grep done | sed -e 's/^[^0-9]*//' -e 's/ of .*$//' | numfmt --to=iec && rm /data/tweetids.txt.gz`
 echo "<li><a href=\"${OUTPUT_FILE}.txt.gz\">${OUTPUT_FILE}.txt.gz</a> (${LINES} tweet ids, ${SIZE})</li>" >> /data/index_ids.html
-s3cmd -c /credentials/s3cfg put /data/index_ids.html s3://${FULL_BUCKET}/index.html
+s3cmd -c /credentials/s3cfg put /data/index_ids.html s3://${ID_BUCKET}/index.html
