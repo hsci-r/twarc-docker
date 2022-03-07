@@ -1,0 +1,61 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  creationTimestamp: "2020-04-17T18:31:06Z"
+  labels:
+    app: hsci-fintwitter
+  name: hsci-fintwitter-daily-s3merge-cronjob
+  namespace: hsci
+  resourceVersion: "526894012"
+  selfLink: /apis/batch/v1beta1/namespaces/hsci/cronjobs/hsci-fintwitter-daily-s3merge-cronjob
+  uid: 99d0d297-80d9-11ea-82ec-fa163eb4bd92
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            app: hsci-fintwitter
+            parent: hsci-fintwitter-daily-s3merge
+        spec:
+          containers:
+          - env:
+            - name: BUCKET
+              value: hsci-fintwitter
+            image: docker.io/hsci/twarc-docker:s3-job
+            imagePullPolicy: Always
+            name: s3-job
+            resources:
+              requests:
+                cpu: 100m
+                memory: 6Mi
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            volumeMounts:
+            - mountPath: /data/
+              name: data
+            - mountPath: /credentials
+              name: credentials
+              readOnly: true
+          dnsPolicy: ClusterFirst
+          restartPolicy: OnFailure
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+          - name: data
+            persistentVolumeClaim:
+              claimName: twarc
+          - name: credentials
+            secret:
+              defaultMode: 420
+              secretName: hsci-credentials
+  schedule: 10 5 * * *
+  successfulJobsHistoryLimit: 3
+  suspend: false
+status: {}
